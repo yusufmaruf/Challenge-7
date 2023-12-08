@@ -22,7 +22,7 @@ function EditCar() {
     const [car, setCar] = useState<Car>();
 
     const URL_BACKEND = "http://localhost:3000";
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGFkbWluIiwiaWQiOjEsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcwMjAwNDkyNywiZXhwIjoxNzAyMDA4NTI3fQ.ApmO-rVcuyK0znhPRG0ikvb8tzPDoJL4Ib11Zr4vepI";
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGFkbWluIiwiaWQiOjEsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcwMjA0MDkyNSwiZXhwIjoxNzAyMDQ0NTI1fQ.hDKbulg7CwVHES_PC6xdUpUKkLenMemsmCu2UOMhYMY";
 
     
     useEffect(() => {

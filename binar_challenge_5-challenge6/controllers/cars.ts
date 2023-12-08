@@ -53,7 +53,7 @@ export  class CarsController {
   init() {
     this.app.get("/cars",  (req, res) => this.getMany(req, res));
     this.app.get("/cars/:id", (req, res) => this.getOne(req, res));
-    this.app.post("/cars",upload.single("file"),authenticateToken,isfulladmin, (req, res) => this.create(req, res));
+    this.app.post("/cars",upload.single("image"),authenticateToken,isfulladmin, (req, res) => this.create(req, res));
     this.app.patch("/cars/:id",authenticateToken,isfulladmin, (req, res) => this.update(req, res));
     // this.app.delete("/cars/:id", (req, res) => this.del(req, res)); 
     this.app.delete("/cars/:id",authenticateToken,isfulladmin, (req, res) => this.softDelete(req, res)); 
@@ -89,6 +89,7 @@ export  class CarsController {
   
      
       const upluodImage = req.file as CustomFile;
+      
       let image: string | undefined;
 
       if (upluodImage) {
@@ -105,6 +106,7 @@ export  class CarsController {
       const lastModifiedById = user?.id;
 
       // Update last_modified_by field with the user ID
+      req.body.image = image??"";
       req.body.last_modified_by = lastModifiedById;
       await this.service.create(req.body);
       return res.status(201).json({ message: 'Car created successfully' });

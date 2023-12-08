@@ -13,7 +13,7 @@ import {
 } from "react-bootstrap";
 
 const URL_BACKEND = "http://localhost:3000"
-const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGFkbWluIiwiaWQiOjEsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcwMjAyODgwOCwiZXhwIjoxNzAyMDMyNDA4fQ.Cex6K-DsN_73Ul8qLTTWpfrgF2Ply-Nq73SnLe-Q7O8";
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGFkbWluIiwiaWQiOjEsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcwMjA0MDkyNSwiZXhwIjoxNzAyMDQ0NTI1fQ.hDKbulg7CwVHES_PC6xdUpUKkLenMemsmCu2UOMhYMY";
 
 
 type Car = {

@@ -55,7 +55,8 @@ function AddCar() {
         
       for (const value in formData) {
         if (Object.prototype.hasOwnProperty.call(formData, value)) {
-          formDataToSend.append(value, String(formData[value]));
+        // @ts-expect-error type errors
+          formDataToSend.append(value, formData[value]);
         }
       }
 
@@ -84,7 +85,7 @@ function AddCar() {
 
 
     const URL_BACKEND = "http://localhost:3000";
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGFkbWluIiwiaWQiOjEsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcwMjAyODgwOCwiZXhwIjoxNzAyMDMyNDA4fQ.Cex6K-DsN_73Ul8qLTTWpfrgF2Ply-Nq73SnLe-Q7O8";
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGFkbWluIiwiaWQiOjEsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcwMjA0NTA1NywiZXhwIjoxNzAyMDQ4NjU3fQ.bXZz5VUbXuwopCdzFCKaPq5ybrTm-ZhUFDmWFungMVg";
 
     return (
         <div>
