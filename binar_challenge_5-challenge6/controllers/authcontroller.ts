@@ -3,6 +3,18 @@ import { Express, Request, Response } from "express";
 import { UserService } from "../services/userservices";
 import { Users } from "../models/users";
 import { authenticateToken, isfulladmin, isAdmin } from "../utils/auth";
+import { OAuth2Client } from "google-auth-library";
+
+const CLIENT_ID = process.env.CLIENT_ID;
+const CLIENT_SECRET = process.env.CLIENT_SECRET;
+
+
+const oAuth2Client = new OAuth2Client(
+  process.env.CLIENT_ID,
+  process.env.CLIENT_SECRET,
+  'postmessage',
+);
+
 
 
 export class UserController {
@@ -16,6 +28,7 @@ export class UserController {
   }
 
   init() {
+    this.app.post("/auth/google", (req, res) => this.googleLogin(req, res));
     this.app.post("/login", (req, res)=> this.login(req, res));
     this.app.post("/register", (req, res)=> this.register(req, res));
     this.app.post("/createadmin", authenticateToken, isAdmin,  (req, res)=> this.createadmin(req, res));
@@ -26,7 +39,7 @@ export class UserController {
     try {
       const token = await this.service.loginUser(email, password);
       if (token) {
-        res.json({ token });
+        res.send({ token });
       } else {
         res.status(401).json({ message: "Invalid credentials" });
       }
@@ -36,6 +49,12 @@ export class UserController {
     }
   }
 
+  async googleLogin(req: Request, res: Response) {
+    const { tokens } = await oAuth2Client.getToken(req.body.code); // exchange code for tokens
+    console.log(tokens);
+  
+    res.json(tokens);
+  }
    async register(req: Request<{}, {}, Users>, res: Response){
 
     try {

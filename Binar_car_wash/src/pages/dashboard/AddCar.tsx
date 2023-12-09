@@ -1,5 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { Card } from 'react-bootstrap';
+const BACKEND_URL = import.meta.env['VITE_BACKEND_URL']
 
 
 type Car = {
@@ -60,7 +61,7 @@ function AddCar() {
         }
       }
 
-      const res = await fetch(`${URL_BACKEND}/cars`, {
+      const res = await fetch(`${BACKEND_URL}/cars`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -77,16 +78,7 @@ function AddCar() {
       console.error("Error submitting form:", error.message);
     }
   };
-
-
-
-   
-
-
-
-    const URL_BACKEND = "http://localhost:3000";
     const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGFkbWluIiwiaWQiOjEsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcwMjA0NTA1NywiZXhwIjoxNzAyMDQ4NjU3fQ.bXZz5VUbXuwopCdzFCKaPq5ybrTm-ZhUFDmWFungMVg";
-
     return (
         <div>
             <Card>

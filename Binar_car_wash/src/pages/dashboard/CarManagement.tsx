@@ -8,9 +8,11 @@ import {
     Container,
     Modal,    
 } from "react-bootstrap";
+import { httpFetch } from "../../utils/http";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
 
-const URL_BACKEND = "http://localhost:3000"
-const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGFkbWluIiwiaWQiOjEsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcwMjA0MDkyNSwiZXhwIjoxNzAyMDQ0NTI1fQ.hDKbulg7CwVHES_PC6xdUpUKkLenMemsmCu2UOMhYMY";
+
+// const URL_BACKEND = import.meta.env['VITE_BACKEND_URL']
 
 
 type Car = {
@@ -27,6 +29,7 @@ function CarManagement() {
     const [cars, setCars] = useState<Car[]>([]);
     const [selectedCar, setSelectedCar] = useState<Car | null>(null);
     const [showModal, setShowModal] = useState(false);
+    const [token] = useLocalStorage('token', {});
 
 
      const navigate = useNavigate();
@@ -42,20 +45,19 @@ function CarManagement() {
     const handleConfirmDelete = async () => {
         if (selectedCar) {
             try {
-                
-                const res = await fetch(`${URL_BACKEND}/cars/${selectedCar.id}`, {
-                  method: "DELETE",
-                  headers: {
-                      "Content-Type": "application/json",
-                      "Authorization": `Bearer ${token}`
-                  },
-                });
-                if (res.ok) {
+                const coba : any = await httpFetch(`cars/${selectedCar.id}`, false, {}, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`,
+                    },
+                })
+                if (coba.message === "Car soft deleted successfully") {
                   // Car deleted successfully, update the state
                   getCars();
                   setShowModal(false);
                 } else {
-                  throw new Error(`Error: ${res.status} - ${res.statusText}`);
+                  throw new Error(`Error: ${coba.status} - ${coba.statusText}`);
                 }
 
                 // For the example, let's assume the car is deleted successfully
@@ -75,23 +77,11 @@ function CarManagement() {
 
     const filterCars = async (capacity: number) => {
         try {
-            const res = await fetch(`${URL_BACKEND}/filtered-cars?capacity=${capacity}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-
-            if (!res.ok) {
-                throw new Error(`Error: ${res.status} - ${res.statusText}`);
-            }
-
-            const json = await res.json();
-
-            // Make sure the response is an array
-
-            setCars(json);
-            
+            const coba : any = await httpFetch('filtered-cars', false, {
+                capacity: capacity
+            }, {});
+            const json = await coba;
+            setCars(json);         
         } catch (error: any) {
             console.error(`Error fetching ${capacity} cars:`, error.message);
         }
@@ -102,19 +92,16 @@ function CarManagement() {
 
     async function getCars() {
         try {
-            const res = await fetch(`${URL_BACKEND}/cars`, {
+            const res :any = await httpFetch('cars', false, {}, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    
+                    // "Authorization": `Bearer ${token}`
                 }
-            });
-
-            if (!res.ok) {
-                throw new Error(`Error: ${res.status} - ${res.statusText}`);
-            }
-
-            const json = await res.json();
+                
+            })
+            console.log(token);
+            const json = await res;
             setCars(json);
         } catch (error:any) {
             console.error("Error fetching cars:", error.message);
@@ -123,6 +110,9 @@ function CarManagement() {
 
 
     useEffect(() => {
+        if ( (!token || Object.keys(token).length === 0)) {
+            navigate('/login');
+        }
         getCars()
     }, []);
 

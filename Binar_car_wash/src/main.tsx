@@ -12,8 +12,13 @@ import "./assets/demo.css"
 import CarManagement from './pages/dashboard/CarManagement.tsx'
 import EditCar from './pages/dashboard/EditCars.tsx'
 import AddCar from './pages/dashboard/AddCar.tsx'
+import Login from './pages/user/Login.tsx'
 
 const router = createBrowserRouter([
+  {
+    path: '/login',
+    element: <Login />,
+  },
   {
     path: '/',
     element: <LandingPages />,
