@@ -1,5 +1,5 @@
 
-import React from 'react';
+
 import { Button } from 'react-bootstrap';
 const HeroSection = () => {
     return (
@@ -14,7 +14,11 @@ const HeroSection = () => {
                                 kualitas terbaik dengan harga terjangkau. selalu siap melayani
                                 kebutuhanmu untuk sewa mobil selama 24 jam.
                             </p>
-                            <Button className="btn btn-success" style={{backgroundColor:"green", color:"white", marginBottom:"10px"}}>Mulai Sewa Mobil</Button>
+                            
+                            <Button className="btn btn-success" style={{ backgroundColor: "green", color: "white", marginBottom: "10px" }}>
+                                Mulai Sewa Mobil
+                            </Button>
+                            
                         </div>
                     </div>
                     <div className="hero-ills ol-md-6 col-md-6 col-sm-12 col-xs-12 justify-content-end">
