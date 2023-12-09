@@ -89,7 +89,7 @@ export class CarsService {
     const cars = filteredCars;
 
     // Send the filtered cars as a response
-    res.render('cars', { cars });
+    res.send(cars);
   } catch (error) {
     res.status(500).json({ error: 'Internal server error' });
   }

@@ -1,6 +1,6 @@
 import { Express, Request, Response } from "express";
 import { CarsService } from "../services/cars";
-import { Cars } from "../models/cars";
+import { Cars, CarsModel } from "../models/cars";
 import { errorWrapper } from "../utils/errorwrapper";
 import { authenticateToken, isfulladmin, isAdmin } from "../utils/auth";
 import { v2 as cloudinary } from "cloudinary";
@@ -183,8 +183,9 @@ async update(req: Request<IParams, {}, Partial<Cars>>, res: Response) {
         }
       }
 
-      const filteredCars = await this.service.getFilteredCars(dateObject, parsedCapacity);
-      res.status(200).json({ cars: filteredCars });
+      const filteredCars = await errorWrapper(this.service.getFilteredCars(dateObject, parsedCapacity));
+      
+      res.status(200).json(filteredCars.data);
     } catch (error) {
       res.status(500).json({ error: 'Internal server error' });
     }

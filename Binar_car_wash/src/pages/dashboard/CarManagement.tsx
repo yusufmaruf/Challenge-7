@@ -1,8 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
-
-
-
 import {
     Card,
     Row,
@@ -76,6 +73,31 @@ function CarManagement() {
         setShowModal(false);
     };
 
+    const filterCars = async (capacity: number) => {
+        try {
+            const res = await fetch(`${URL_BACKEND}/filtered-cars?capacity=${capacity}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (!res.ok) {
+                throw new Error(`Error: ${res.status} - ${res.statusText}`);
+            }
+
+            const json = await res.json();
+
+            // Make sure the response is an array
+
+            setCars(json);
+            
+        } catch (error: any) {
+            console.error(`Error fetching ${capacity} cars:`, error.message);
+        }
+    };
+
+
   
 
     async function getCars() {
@@ -119,28 +141,30 @@ function CarManagement() {
                     </Button>
                 </Col>
                 <Col className="d-flex">
-                    <Button className="md-3 " style={{marginLeft:"10px"}}>All</Button>
-                    <Button className="md-3 " style={{marginLeft:"10px"}}>Small</Button>
-                    <Button className="md-3 " style={{marginLeft:"10px"}}>Medium</Button>
-                    <Button className="md-3 " style={{marginLeft:"10px"}}>Large</Button>
+                    <Button className="md-3 " style={{marginLeft:"10px"}} onClick={() => filterCars(0)}>All</Button>
+                    <Button className="md-3 " style={{marginLeft:"10px"}} onClick={() => filterCars(2)}>Small</Button>
+                    <Button className="md-3 " style={{marginLeft:"10px"}}onClick={() => filterCars(4)}>Medium</Button>
+                    <Button className="md-3 " style={{marginLeft:"10px"}} onClick={() => filterCars(6)}>Large</Button>
                 </Col>
 
                 <Row>
-                   {cars.map((car) => (
-                       <Col style={{marginTop:"20px"}} md="4">
-                           <Card key={car.id}>
-                               <Card.Img variant="top" src={car.image} width={300} height={300}/>
-                               <Card.Body>
-                                   <Card.Title>{car.plate}</Card.Title>
-                                   <Card.Text>
-                                       {car.description}
-                                   </Card.Text>
-                                   <Button variant="primary" onClick={() => handleEditClick(car.id)} style={{color:"black", borderColor:"black", backgroundColor:"yellow"}}>Edit</Button>
-                                   <Button variant="primary" onClick={() => handleDeleteClick(car)} style={{color:"black", borderColor:"black", backgroundColor:"red", marginLeft:"10px"}}>Hapus</Button>
-                               </Card.Body>
-                           </Card>
-                       </Col>
-                   ))}
+                    {cars.map((car) => (
+                        <Col style={{ marginTop: "20px" }} md="4">
+                            <Card key={car.id}>
+                                <Card.Img variant="top" src={car.image} width={300} height={300} />
+                                <Card.Body>
+                                    <Card.Title>{car.plate}</Card.Title>
+                                    <Card.Text>
+                                        Kapasitas :{car.capacity}
+                                        <br />
+                                        {car.description}
+                                    </Card.Text>
+                                    <Button variant="primary" onClick={() => handleEditClick(car.id)} style={{ color: "black", borderColor: "black", backgroundColor: "yellow" }}>Edit</Button>
+                                    <Button variant="primary" onClick={() => handleDeleteClick(car)} style={{ color: "black", borderColor: "black", backgroundColor: "red", marginLeft: "10px" }}>Hapus</Button>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    ))}
                 </Row>
 
                 

@@ -60,7 +60,7 @@ export  class CarsRepository {
 
 
     async getFilteredCars(date?: Date, capacity?: number): Promise<Cars[]> {
-        let query = CarsModel.query();
+        let query = CarsModel.query().where("deleted", false);
 
         if (date) {
         query = query.where('availableAt', '<=', date);
@@ -69,8 +69,8 @@ export  class CarsRepository {
         if (capacity) {
         query = query.where('capacity', '>=', capacity);
         }
-
-        return await query;
+        const cars = await query;
+        return cars;
     }
 
 
