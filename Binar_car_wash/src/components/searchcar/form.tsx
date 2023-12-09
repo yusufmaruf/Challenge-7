@@ -1,9 +1,11 @@
+import { useEffect, useState } from "react";
+import { httpFetch } from "../../utils/http";
+
 import {
     Card,
     Row,
     Col,    
 } from "react-bootstrap";
-import { useEffect, useState } from "react";
 type Car = {
     id: number,
     model: string;
@@ -23,19 +25,15 @@ const URL_BACKEND = import.meta.env['VITE_BACKEND_URL']
     
     async function getCars() {
         try {
-            const res = await fetch(`${URL_BACKEND}/cars`, {
+            const res: any = await httpFetch('cars', false, {}, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    
+                    // "Authorization": `Bearer ${token}`
                 }
-            });
-
-            if (!res.ok) {
-                throw new Error(`Error: ${res.status} - ${res.statusText}`);
-            }
-
-            const json = await res.json();
+                
+            })
+            const json = await res;
             setCars(json);
         } catch (error:any) {
             console.error("Error fetching cars:", error.message);
@@ -46,24 +44,15 @@ const URL_BACKEND = import.meta.env['VITE_BACKEND_URL']
         event.preventDefault();
 
         const formData = new FormData(event.currentTarget);
-        const driver = formData.get("driver") as string;
         const date = formData.get("date") as string;
-        const jemput = formData.get("jemput") as string;
         const capacity = formData.get("capacity") as string;
 
         try {
-            const res = await fetch(`${URL_BACKEND}/filtered-cars?driver=${driver}&date=${date}&jemput=${jemput}&capacity=${capacity}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-
-            if (!res.ok) {
-                throw new Error(`Error: ${res.status} - ${res.statusText}`);
-            }
-
-            const json = await res.json();
+            const res = await httpFetch(`filtered-cars`, false, {
+                date: date,
+                capacity: capacity,
+            }, {});
+            const json:any = await res;
             setCars(json);
         } catch (error: any) {
             console.error("Error filtering cars:", error.message);
