@@ -4,10 +4,16 @@ import { httpFetch } from "../../utils/http";
 import { useLocalStorage } from "../../hooks/useLocalStorage"; 
   import { GoogleOauthToken } from "../../types";
 import { useGoogleLogin } from "@react-oauth/google";
+import { TUserInfoContext, UserInfoContext } from "../../context/userInfo";
+import { ContextType, useContext, Context } from 'react'
+
+
+
  
 export default function Login() {
   const navigate = useNavigate()
   const [_token, setToken] = useLocalStorage('token', {})
+  const {userInfo, saveUserInfo } = useContext(UserInfoContext) as ContextType<Context<TUserInfoContext>>
 
   // eslint-disable-next-line
 
@@ -33,8 +39,9 @@ export default function Login() {
   }
 
   const loginWithGoogle = useGoogleLogin({
+
     onSuccess: async ({ code }) => {
-      const tokens:GoogleOauthToken = await httpFetch('auth/google', false, {}, {
+      const tokens: GoogleOauthToken = await httpFetch('auth/google', false, {}, {
         method: 'post',
         body: JSON.stringify({ code })
       })
@@ -46,15 +53,14 @@ export default function Login() {
           'Authorization': `${tokens.token_type} ${tokens.access_token}`
         }
       })
-
       const userInfo = await resUserInfo.json()
-      console.log(userInfo);
-      
+      saveUserInfo(userInfo)   
+      navigate('/')
     
 
     },
     flow: 'auth-code',
-  })
+  });
 
   return (
     <div>
@@ -88,7 +94,7 @@ export default function Login() {
                     </div>
                     <div className="mt-3">
                       <div className="d-flex align-items-center justify-content-center">
-                        <button className="mb-3" onClick={() => loginWithGoogle()}>Login with Google</button>
+                        <button className="mb-3" onClick={loginWithGoogle}>Login with Google</button>
                       </div>
                       <p className="mb-0  text-center">
                         Don't have an account?{" "}

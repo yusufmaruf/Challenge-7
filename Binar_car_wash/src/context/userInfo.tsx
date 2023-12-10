@@ -12,7 +12,7 @@ export const UserInfoContext = createContext<ContextType<Context<TUserInfoContex
 // @ts-expect-error wrong types
 const UserInfoProvider: React.FC<React.ReactNode> = ({ children }) => {
   const [userInfo, setUserInfo] = useState<UserInfo | undefined>()
-  const [storedValue, setValue] = useLocalStorage('userInfo', {})
+  const [storedValue, setValue] = useLocalStorage('userInfo', undefined)
 
   useEffect(() => {
     if (storedValue) {

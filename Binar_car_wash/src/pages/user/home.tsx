@@ -7,12 +7,17 @@ import WhyUs from "../../components/landingpages/whyus"
 import HeroSection from "../../components/user/herosection"
 import HomeHeader from "../../components/user/navbar"
 import TestimoniCarouser from "../../components/landingpages/carouser"
+import { TUserInfoContext, UserInfoContext } from "../../context/userInfo";
+import { ContextType, useContext, Context } from 'react'
 
 
 function LandingPages() {
+  const {userInfo} = useContext(UserInfoContext) as ContextType<Context<TUserInfoContext>>
+    const username = userInfo ? userInfo.name || "" : "";
     return (
         <>
-            <HomeHeader />
+            
+            <HomeHeader username={username}   />
             <HeroSection />
             <OurService />
             <WhyUs />

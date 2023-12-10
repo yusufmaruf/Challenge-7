@@ -14,20 +14,30 @@ import EditCar from './pages/dashboard/EditCars.tsx'
 import AddCar from './pages/dashboard/AddCar.tsx'
 import Login from './pages/user/Login.tsx'
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import UserInfoProvider from './context/userInfo.tsx'
 
+
+function withUserContext(element: React.ReactNode) {
+  return (
+    // @ts-expect-error wrong types
+    <UserInfoProvider>
+      {element}
+    </UserInfoProvider>
+  )
+}
 
 const router = createBrowserRouter([
   {
     path: '/login',
-    element: <Login />,
+    element: withUserContext(<Login />) ,
   },
   {
     path: '/',
-    element: <LandingPages />,
+    element:withUserContext( <LandingPages />),
   },
   {
     path: '/cars',
-    element: <CariMobil />,
+    element:withUserContext( <CariMobil />) ,
   },
   {
     path: '/dashboard',
