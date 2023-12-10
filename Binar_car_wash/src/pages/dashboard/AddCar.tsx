@@ -1,5 +1,7 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { Card } from 'react-bootstrap';
+import { httpFetch } from '../../utils/http';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
 const BACKEND_URL = import.meta.env['VITE_BACKEND_URL']
 
 
@@ -38,10 +40,11 @@ const initialState: Car = {
 };
 
 function AddCar() {
+    const [token] = useLocalStorage('token', {});
     
     const [formData, setFormData] = useState<Car>(initialState); const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
-
+      
     setFormData((prevData) => ({
       ...prevData,
       [name]: type === "file" ? (e.target as HTMLInputElement).files?.[0] : value,
@@ -61,6 +64,8 @@ function AddCar() {
         }
       }
 
+      
+
       const res = await fetch(`${BACKEND_URL}/cars`, {
         method: "POST",
         headers: {
@@ -78,7 +83,7 @@ function AddCar() {
       console.error("Error submitting form:", error.message);
     }
   };
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGFkbWluIiwiaWQiOjEsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcwMjA0NTA1NywiZXhwIjoxNzAyMDQ4NjU3fQ.bXZz5VUbXuwopCdzFCKaPq5ybrTm-ZhUFDmWFungMVg";
+    // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGFkbWluIiwiaWQiOjEsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcwMjA0NTA1NywiZXhwIjoxNzAyMDQ4NjU3fQ.bXZz5VUbXuwopCdzFCKaPq5ybrTm-ZhUFDmWFungMVg";
     return (
         <div>
             <Card>

@@ -1,10 +1,10 @@
 import { Col, Button, Row, Container, Card, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { httpFetch } from "../../utils/http";
-import { useLocalStorage } from "../../hooks/useLocalStorage";
-
-
-
+import { useLocalStorage } from "../../hooks/useLocalStorage"; 
+  import { GoogleOauthToken } from "../../types";
+import { useGoogleLogin } from "@react-oauth/google";
+ 
 export default function Login() {
   const navigate = useNavigate()
   const [_token, setToken] = useLocalStorage('token', {})
@@ -32,6 +32,30 @@ export default function Login() {
     }
   }
 
+  const loginWithGoogle = useGoogleLogin({
+    onSuccess: async ({ code }) => {
+      const tokens:GoogleOauthToken = await httpFetch('auth/google', false, {}, {
+        method: 'post',
+        body: JSON.stringify({ code })
+      })
+
+      const resUserInfo = await fetch('https://openidconnect.googleapis.com/v1/userinfo?', {
+        method: 'get',
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `${tokens.token_type} ${tokens.access_token}`
+        }
+      })
+
+      const userInfo = await resUserInfo.json()
+      console.log(userInfo);
+      
+    
+
+    },
+    flow: 'auth-code',
+  })
+
   return (
     <div>
       <Container>
@@ -58,7 +82,14 @@ export default function Login() {
                         Submit
                       </Button>
                     </Form>
+
+                    <div>
+
+                    </div>
                     <div className="mt-3">
+                      <div className="d-flex align-items-center justify-content-center">
+                        <button className="mb-3" onClick={() => loginWithGoogle()}>Login with Google</button>
+                      </div>
                       <p className="mb-0  text-center">
                         Don't have an account?{" "}
                         <a href="{''}" className="text-primary fw-bold">

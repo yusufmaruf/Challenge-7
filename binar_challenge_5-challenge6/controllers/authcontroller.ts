@@ -1,9 +1,13 @@
 // user.controller.ts
+
 import { Express, Request, Response } from "express";
 import { UserService } from "../services/userservices";
 import { Users } from "../models/users";
 import { authenticateToken, isfulladmin, isAdmin } from "../utils/auth";
-import { OAuth2Client } from "google-auth-library";
+import { OAuth2Client, UserRefreshClient } from "google-auth-library";
+import dotenv from "dotenv";
+import path from "path";
+dotenv.config({ path: path.resolve(__dirname, "../../.env") }); 
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
@@ -31,7 +35,9 @@ export class UserController {
     this.app.post("/auth/google", (req, res) => this.googleLogin(req, res));
     this.app.post("/login", (req, res)=> this.login(req, res));
     this.app.post("/register", (req, res)=> this.register(req, res));
-    this.app.post("/createadmin", authenticateToken, isAdmin,  (req, res)=> this.createadmin(req, res));
+    this.app.post("/createadmin", authenticateToken, isAdmin, (req, res) => this.createadmin(req, res));
+    this.app.post("/auth/google", (req, res) => this.googleLogin(req, res));
+    this.app.post("/googlerefresh", (req, res) => this.googlerefresh(req, res));
   }
 
    async login(req: Request, res: Response) {
@@ -47,13 +53,23 @@ export class UserController {
       console.error(error);
       res.status(500).json({ message: "Internal Server Error" });
     }
-  }
+   }
+  
 
   async googleLogin(req: Request, res: Response) {
     const { tokens } = await oAuth2Client.getToken(req.body.code); // exchange code for tokens
     console.log(tokens);
-  
     res.json(tokens);
+  }
+
+  async googlerefresh(req: Request, res: Response) {
+    const user = new UserRefreshClient(
+    CLIENT_ID,
+    CLIENT_SECRET,
+    req.body.refreshToken,
+  );
+  const { credentials } = await user.refreshAccessToken(); // optain new tokens
+  res.json(credentials);
   }
    async register(req: Request<{}, {}, Users>, res: Response){
 

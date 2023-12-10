@@ -13,6 +13,8 @@ import CarManagement from './pages/dashboard/CarManagement.tsx'
 import EditCar from './pages/dashboard/EditCars.tsx'
 import AddCar from './pages/dashboard/AddCar.tsx'
 import Login from './pages/user/Login.tsx'
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
 
 const router = createBrowserRouter([
   {
@@ -54,6 +56,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+     <GoogleOAuthProvider clientId='461189598146-0uub0q2c9fdihqueom783ef1emdp9jdv.apps.googleusercontent.com'>
+      <RouterProvider router={router} />
+    </GoogleOAuthProvider>
   </React.StrictMode>,
 )

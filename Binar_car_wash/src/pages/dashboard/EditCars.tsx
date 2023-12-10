@@ -1,8 +1,11 @@
 import  { useEffect, useState , ChangeEvent, FormEvent} from 'react';
 import { Card } from 'react-bootstrap';
 import {  useParams,  } from 'react-router-dom';
-
+import { useLocalStorage } from '../../hooks/useLocalStorage';
+const URL_BACKEND = import.meta.env['VITE_BACKEND_URL']
 function EditCar() {
+    const [token] = useLocalStorage('token', {});
+
 
     type Car = {
         id: number,
@@ -21,8 +24,6 @@ function EditCar() {
     const { carId } = useParams();
     const [car, setCar] = useState<Car>();
 
-    const URL_BACKEND = "http://localhost:3000";
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGFkbWluIiwiaWQiOjEsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcwMjA0MDkyNSwiZXhwIjoxNzAyMDQ0NTI1fQ.hDKbulg7CwVHES_PC6xdUpUKkLenMemsmCu2UOMhYMY";
 
     
     useEffect(() => {

@@ -7,6 +7,13 @@ import { UserController } from "./controllers/authcontroller";
 
 import swaggerUi from "swagger-ui-express";
 import swaggerDocument from "./swagger.json";
+import dotenv from "dotenv";
+import path from "path";
+dotenv.config({ path: path.resolve(__dirname, "../../.env") }); 
+
+
+
+
 
 
 
@@ -40,6 +47,7 @@ const knexInstance = knex({
 
 
 class App {
+  
   app: Express;
 
   constructor(app: Express) {
